@@ -14,13 +14,12 @@ export default function Home() {
 
   const handleSubmit = async () => {
       try {
-          const res = await axios.post('http://localhost:8000/addExpense', { expense });
-          console.log(res.data);
+          const res = await axios.post('http://localhost:8000/api/expenses/add', { expense });
           setResult(res.data.result);
           toast({
-            title: "Expense added successfully",
-            description: expense,
-          })
+            description: res.data.message,
+            variant: 'default',
+        })
       } catch (error) {
           console.error('Error sending response:', error);
       }
