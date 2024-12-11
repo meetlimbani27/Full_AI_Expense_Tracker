@@ -9,10 +9,12 @@
   },
   "dependencies": {
     "@langchain/openai": "^0.3.14",
+    "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "langchain": "^0.3.6",
+    "langsmith": "^0.2.11",
     "mongoose": "^8.8.4",
     "winston": "^3.17.0"
   },

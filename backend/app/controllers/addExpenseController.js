@@ -1,5 +1,6 @@
 // app/controllers/addExpenseController.js
 const { ChatOpenAI } = require('@langchain/openai');
+// const { SystemMessage, HumanMessage } = require('@langchain/core/messages');
 
 const addExpenseController = {};
 
@@ -18,6 +19,11 @@ addExpenseController.addExpense = async (req, res, next) => {
         temperature: 0.3,  // Lower temperature for more consistent outputs
         modelName: "gpt-3.5-turbo"
     });
+
+    // let message = [
+    //     new SystemMessage("Categorize the expense as 'add' or 'retrieve' or 'not an expense': "),
+    //     new HumanMessage(expense)
+    // ]        // this approach requires more token but the latency is slightly low here
     const systemMessage = `Categorize the expense as 'add' or 'retrieve' or 'not an expense': "${expense}"`;
 
     try {
@@ -32,7 +38,7 @@ addExpenseController.addExpense = async (req, res, next) => {
 
         } else if (category === 'not an expense') {
             message = 'This is not an expense.';
-            
+
         } else {
             return res.status(400).json({ error: 'Invalid category received from model.' });
         }
