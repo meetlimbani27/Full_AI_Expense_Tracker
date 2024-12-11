@@ -8,9 +8,9 @@ const addExpenseController = {};
  * Handles adding an expense by categorizing it as 'add' or 'retrieve'.
  */
 addExpenseController.addExpense = async (req, res, next) => {
-    const { expense } = req.body;
+    const { IncomingExpense } = req.body;
 
-    if (!expense) {
+    if (!IncomingExpense) {
         return res.status(400).json({ error: 'Expense field is required.' });
     }
 
@@ -24,7 +24,7 @@ addExpenseController.addExpense = async (req, res, next) => {
     //     new SystemMessage("Categorize the expense as 'add' or 'retrieve' or 'not an expense': "),
     //     new HumanMessage(expense)
     // ]        // this approach requires more token but the latency is slightly low here
-    const systemMessage = `Categorize the expense as 'add' or 'retrieve' or 'not an expense': "${expense}"`;
+    const systemMessage = `Categorize the expense as 'add' or 'retrieve' or 'not an expense': "${IncomingExpense}"`;
 
     try {
         const resFromModel = await model.invoke(systemMessage);

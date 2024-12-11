@@ -11,10 +11,13 @@ export default function Home() {
   const { toast } = useToast()
   const [expense, setExpense] = useState('');
   const [result, setResult] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
       try {
+          setLoading(true);
           const res = await axios.post('http://localhost:8000/api/expenses/add', { expense });
+          setLoading(false);
           setResult(res.data.result);
           toast({
             description: res.data.message,
@@ -35,7 +38,16 @@ export default function Home() {
         value={expense}
         onChange={(e) => setExpense(e.target.value)}
       />
-      <Button variant={"outline"} onClick={handleSubmit}>Send Expense</Button>
+      <Button variant={"outline"} onClick={handleSubmit} disabled={loading}>
+        {loading ? (
+          <span className="flex items-center gap-2">
+            <span className="spinner-border animate-spin inline-block w-4 h-4 border-2 rounded-full"></span>
+            Sending...
+          </span>
+        ) : (
+          "Send Expense"
+        )}
+      </Button>
       <div className='text-[#e6e0e0] font-bold'>{result}</div>
     </section>
   );
