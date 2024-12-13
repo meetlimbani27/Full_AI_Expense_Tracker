@@ -3,7 +3,8 @@ let { json } = require('express');
 const { ChatOpenAI } = require('@langchain/openai');
 const { ChatPromptTemplate, PromptTemplate } = require('@langchain/core/prompts');
 const Expense = require('../models/Expense');
-const logger = require('../../config/config'); // Assuming logger setup in a config file
+const logger = require('../../config/config');
+const vectorStore = require('../../db/vectorStore');
 // const { SystemMessage, HumanMessage } = require('@langchain/core/messages');
 
 const addExpenseController = {};
@@ -66,7 +67,10 @@ addExpenseController.addExpense = async (req, res, next) => {
 
                     // Save expense to Mongo database
                     const newExpense = new Expense(json);
-                    await newExpense.save();               
+                    await newExpense.save();
+                    // Save expense to vector database
+                    await vectorStore.addExpense(json); 
+
                     message = 'Expense added successfully!';
                 } catch (error) {
                     logger.error('Error saving expense: ', error);
