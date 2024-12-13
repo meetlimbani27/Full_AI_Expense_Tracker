@@ -16,7 +16,7 @@ export default function Home() {
   const handleSubmit = async () => {
       try {
         console.log("sending",{expense});
-        const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense });
+        const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense, mode: 'chat' });
         console.log(res.data);
         //   setLoading(true);
         //   console.log(expense);

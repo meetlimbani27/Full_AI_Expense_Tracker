@@ -39,7 +39,7 @@ const client = new QdrantClient({
 // Initialize vector store with Qdrant
 const vectorStore = new QdrantVectorStore(client, embeddings, {
   collectionName: COLLECTION_NAME,
-});
+}); 
 logger.info(`Vector store initialized for collection: ${COLLECTION_NAME}`);
 
 vectorStore.addExpense = async(expense) => {

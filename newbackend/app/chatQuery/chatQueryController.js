@@ -8,14 +8,15 @@ chatQueryController.incomingChatQuery = async (req, res, next) => {
     console.log('chatQueryController controller hit');
 
     const incomingQuery = req.body.expense;
+    const mode = req.body.mode;
     if (!incomingQuery) {
         return res.status(400).json({ error: 'Expense field is not provided.' });
     }
 
     // sending the expense to the service
     try {
-        console.log('sending expense to service');
-        const result = await chatQueryService.categorizeQuery(incomingQuery);
+        console.log('sending expense to chatQueryService');
+        const result = await chatQueryService.categorizeQuery(incomingQuery, mode);
         res.status(200).json(result);
 
 
