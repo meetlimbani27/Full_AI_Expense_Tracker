@@ -2,10 +2,6 @@ newbackend/
 ├── .env
 ├── .env.example
 ├── app/
-│   ├── aQuery/
-│   │   ├── aQueryController.js
-│   │   ├── aQueryRoutes.js
-│   │   └── faQueryService.js
 │   ├── addExpense/
 │   │   ├── addExpenseController.js
 │   │   ├── addExpenseRoutes.js

@@ -13,8 +13,8 @@ app.use(express.json());
 
 
 //Routes
-const aQueryRoutes = require('./app/aQuery/aQueryRoutes');
-app.use('/api/aQuery', aQueryRoutes);
+const chatQueryRoutes = require('./app/chatQuery/chatQueryRoutes');
+app.use('/api/chatQuery', chatQueryRoutes);
 
 
 
