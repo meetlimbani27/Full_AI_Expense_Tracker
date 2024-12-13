@@ -1,0 +1,67 @@
+Expense Categories:
+1. Finsy
+   - Testing Finsy's First response
+
+2. Housing
+   - Rent
+   - Mortgage payments
+   - Utility bills (electricity, water, heating)
+   - Maintenance and repairs
+   - Property taxes
+
+3. Transportation
+   - Fuel
+   - Public transportation costs
+   - Vehicle maintenance
+   - Insurance
+   - Parking fees
+   - Tolls
+
+4. Food
+   - Groceries
+   - Dining out
+   - Snacks and beverages
+   - Takeout and delivery
+
+5. Personal Care
+   - Health care expenses
+   - Medications
+   - Gym memberships
+   - Toiletries
+   - Haircuts and salon services
+   - Spa treatments
+
+6. Entertainment
+   - Movies, concerts, and shows
+   - Sports events and activities
+   - Hobbies and crafts
+   - Subscriptions (streaming services, magazines)
+   - Vacations and travel
+
+7. Clothing and Accessories
+   - Clothing purchases
+   - Shoes and accessories
+   - Dry cleaning and laundry
+
+8. Debt Payments
+   - Credit card payments
+   - Loans (personal, student, etc.)
+   - Other debt repayments
+
+9. Savings and Investments
+   - Contributions to savings accounts
+   - Retirement funds (401(k), IRA)
+   - Stocks and other investments
+
+10. Education
+   - Tuition fees
+   - Books and supplies
+   - Educational courses and workshops
+
+11. Miscellaneous
+    - Gifts and donations
+    - Pet care
+    - Home decor and furnishings
+    - Technology and gadgets
+    - Legal fees and taxes
+    - Unexpected expenses

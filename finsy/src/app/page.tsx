@@ -16,9 +16,25 @@ export default function Home() {
   const handleSubmit = async () => {
       try {
           setLoading(true);
-          const res = await axios.post('http://localhost:8000/api/expenses/add', { expense });
+          console.log(expense);
+          const res = await axios.post('http://localhost:8000/api/expenses/analyze', { expense });
           setLoading(false);
-          setResult(res.data.result);
+
+          switch(res.data.json.intent) {
+            case 'adding':
+              setResult(res.data.json.response);
+              
+              break;
+            case 'retrieving':
+              setResult(res.data.json.response);
+              
+              break;
+            case 'not an expense':
+              
+              break;
+            
+          }
+
           toast({
             description: res.data.message,
             variant: 'default',
