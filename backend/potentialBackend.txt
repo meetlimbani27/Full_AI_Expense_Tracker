@@ -1,0 +1,45 @@
+backend/
+├── app/
+│   ├── expenses/
+│   │   ├── controllers/
+│   │   │   └── addExpenseController.js
+│   │   ├── models/
+│   │   │   └── Expense.js
+│   │   ├── routes/
+│   │   │   └── addExpenseRoutes.js
+│   │   └── services/
+│   │       └── expenseService.js
+│   ├── users/
+│   │   ├── controllers/
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── services/
+│   └── ... (other features)
+├── config/
+│   ├── index.js
+│   ├── development.js
+│   ├── production.js
+│   └── test.js
+├── db/
+│   ├── index.js
+│   ├── vectorStore.js
+│   └── vectorStoreReference.js
+├── middleware/
+│   ├── errorHandler.js
+│   ├── authMiddleware.js
+│   └── ... (other middleware)
+├── utils/
+│   ├── logger.js
+│   ├── helpers.js
+│   └── ... (other utilities)
+├── tests/
+│   ├── unit/
+│   └── integration/
+├── docs/
+│   └── API.md
+├── scripts/
+│   └── setup.js
+├── .env.example
+├── category.txt
+├── index.js
+└── package.json

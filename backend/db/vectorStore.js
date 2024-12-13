@@ -79,8 +79,8 @@ vectorStore.addExpense = async(expense) => {
       },
     ],
   });
-  return true;
   logger.info('Expense added to Qdrant successfully');
+  return true;
 
   } catch (error) {
     logger.error('Error adding expense to Qdrant:', error);
