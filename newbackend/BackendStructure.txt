@@ -1,0 +1,42 @@
+newbackend/
+├── .env
+├── .env.example
+├── app/
+│   ├── aQuery/
+│   │   ├── aQueryController.js
+│   │   ├── aQueryRoutes.js
+│   │   └── faQueryService.js
+│   ├── addExpense/
+│   │   ├── addExpenseController.js
+│   │   ├── addExpenseRoutes.js
+│   │   └── addExpenseService.js
+│   ├── chatQuery/
+│   │   ├── chatQueryController.js
+│   │   ├── chatQueryRoutes.js
+│   │   └── chatQueryService.js
+│   ├── retrieveExpense/
+│   │   ├── retrieveExpenseController.js
+│   │   ├── retrieveExpenseRoutes.js
+│   │   └── retrieveExpenseService.js
+│   └── voiceQuery/
+│       ├── voiceQueryController.js
+│       ├── voiceQueryRoutes.js
+│       └── voiceQueryService.js
+├── category.txt
+├── config/
+│   └── config.js
+├── db/
+│   ├── index.js
+│   ├── models/
+│   │   └── addExpense.js
+│   └── vectorStore.js
+├── index.js
+├── middleware/
+│   └── errorHandler.js
+├── node_modules/
+│   └── ...
+├── package-lock.json
+├── package.json
+├── potentialBackend.txt
+└── utils/
+    └── logger.js

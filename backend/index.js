@@ -13,7 +13,7 @@ const errorHandler = require('./middleware/errorHandler');
 
 
 // Import routes
-const addExpenseRoutes = require('./app/routes/addExpenseRoutes'); // Ensure this path is correct
+const addExpenseRoutes = require('./app/routes/addExpenseRoutes');
 
 
 connectDB().then(() => {

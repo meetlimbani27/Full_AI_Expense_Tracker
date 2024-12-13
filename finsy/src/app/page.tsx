@@ -15,30 +15,32 @@ export default function Home() {
 
   const handleSubmit = async () => {
       try {
-          setLoading(true);
-          console.log(expense);
-          const res = await axios.post('http://localhost:8000/api/expenses/analyze', { expense });
-          setLoading(false);
+        const res = await axios.get('http://localhost:8000/api/aQuery/test');
+        console.log(res.data);
+        //   setLoading(true);
+        //   console.log(expense);
+        //   const res = await axios.post('http://localhost:8000/api/expenses/analyze', { expense });
+        //   setLoading(false);
 
-          switch(res.data.json.intent) {
-            case 'adding':
-              setResult(res.data.json.response);
+        //   switch(res.data.json.intent) {
+        //     case 'adding':
+        //       setResult(res.data.json.response);
               
-              break;
-            case 'retrieving':
-              setResult(res.data.json.response);
+        //       break;
+        //     case 'retrieving':
+        //       setResult(res.data.json.response);
               
-              break;
-            case 'not an expense':
+        //       break;
+        //     case 'not an expense':
               
-              break;
+        //       break;
             
-          }
+        //   }
 
-          toast({
-            description: res.data.message,
-            variant: 'default',
-        })
+        //   toast({
+        //     description: res.data.message,
+        //     variant: 'default',
+        // })
       } catch (error) {
           console.error('Error sending response:', error);
       }
