@@ -15,7 +15,8 @@ export default function Home() {
 
   const handleSubmit = async () => {
       try {
-        const res = await axios.get('http://localhost:8000/api/aQuery/test');
+        console.log("sending",{expense});
+        const res = await axios.post('http://localhost:8000/api/aQuery/test', { expense });
         console.log(res.data);
         //   setLoading(true);
         //   console.log(expense);

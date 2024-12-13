@@ -6,9 +6,9 @@ const aQueryController = require('./aQueryController');
 
 
 const aQueryMiddleware = [
-    aQueryController.getAQuery,
+    aQueryController.incomingAQuery,
 ]
-aQueryRouter.get('/test', aQueryMiddleware);
+aQueryRouter.post('/test', aQueryMiddleware);
 
 
 module.exports = aQueryRouter;
