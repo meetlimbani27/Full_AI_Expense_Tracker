@@ -10,17 +10,35 @@ import { useToast } from "@/hooks/use-toast"
 export default function Home() {
   const { toast } = useToast()
   const [expense, setExpense] = useState('');
-  const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
+  const [response, setResponse] = useState('');
+  const [intent, setIntent] = useState('');
 
   const handleSubmit = async () => {
       try {
+        setLoading(true);
         console.log("sending",{expense});
         const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense, mode: 'chat' });
-        toast({
-          description: res.data,
-          variant: 'default',
-        })
+        const { response, intent } = res.data;
+
+        setResponse(response);
+        setIntent(intent);
+        setLoading(false);
+
+        switch (intent) {
+          case 'adding':
+            toast({
+              description: response,
+              variant: 'default',
+            });
+            break;
+          case 'not an expense':
+            toast({
+              description: 'Enter an expense if you would like to add an expense',
+              variant: 'default',
+            });
+            break;
+        }
         //   setLoading(true);
         //   console.log(expense);
         //   const res = await axios.post('http://localhost:8000/api/expenses/analyze', { expense });
@@ -70,7 +88,7 @@ export default function Home() {
           "Send Expense"
         )}
       </Button>
-      <div className='text-[#e6e0e0] font-bold'>{result}</div>
+      {(intent === "not an expense") && (<div className='text-[#e6e0e0] font-bold'>{response}</div>)}
     </section>
   );
 }

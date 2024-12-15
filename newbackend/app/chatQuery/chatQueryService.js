@@ -1,8 +1,9 @@
 // app/chatQuery/chatQueryService.js
+
 const { ChatOpenAI } = require('@langchain/openai');
-const { ChatPromptTemplate, PromptTemplate } = require('@langchain/core/prompts');
 const makeAddJSONService = require('../makeJSON/makeAddJSONService');
-// const Expense = require('../../db/models/addExpense');
+const notJSONService = require('../makeJSON/notJSONService');
+
 
 const expenseService = {};
 
@@ -18,7 +19,7 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
     timeout: 60000, 
   });
 
-  const systemPrompt = `Categorize the expense's intent as either 'adding' or 'querying' or 'not an expense' only. Here is the expense statement: "${incomingQuery}"`;
+  const systemPrompt = `Categorize the expense's intent as either 'adding'(for adding expense) or 'querying'(for querying about expense) or 'not an expense'(for general questions) only. Here is the expense statement: "${incomingQuery}"`;
 
   try {
     const result = await model.invoke(systemPrompt);
@@ -29,14 +30,23 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
       case 'adding':
         console.log('making JSON')
         const makeAddJSONResult = await makeAddJSONService.makeAddJSON(incomingQuery, mode);
-        console.log('expense result', makeAddJSONResult.response)
-        return makeAddJSONResult.response;
-      case 'querying':
+        console.log('expense result', makeAddJSONResult)
+        return {
+                  response: makeAddJSONResult,
+                  intent: intent
+                };
+
+        case 'querying':
         console.log('querying expense')
         return 'query reurned';
       default:
-        console.log('not an expense')
-        return 'this was not an expense';
+        console.log('not an expense');
+        const notJSONResult = await notJSONService.notJSON(incomingQuery);
+        console.log('intent', intent)
+        return {
+          response: notJSONResult,
+          intent: intent
+        } 
     }
 
 

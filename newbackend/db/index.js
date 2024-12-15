@@ -2,9 +2,10 @@
 const mongoose = require('mongoose');
 
 const connectDB = async() => {
+  console.log('connectDB hit', process.env.MONGODB_DB_NAME);
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
-      dbName: 'Main',
+      dbName: process.env.MONGODB_DB_NAME,
     });
     console.log('MongoDB connected successfully');
   } catch (error) {

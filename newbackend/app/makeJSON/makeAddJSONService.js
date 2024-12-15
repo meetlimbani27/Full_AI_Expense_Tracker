@@ -40,7 +40,7 @@ makeAddJSONService.makeAddJSON = async (incomingQuery, mode) => {
     };
     console.log('json created')
     const addExpenseResult = await addExpenseService.addExpense(json);
-    return addExpenseResult;
+    return addExpenseResult.response;
     
   } catch (error) {
     

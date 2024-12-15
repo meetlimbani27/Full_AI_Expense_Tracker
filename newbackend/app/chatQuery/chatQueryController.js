@@ -1,4 +1,5 @@
 // app/chatQuery/aQueryController.js
+
 const chatQueryService = require('../chatQuery/chatQueryService');
 
 const chatQueryController = {};

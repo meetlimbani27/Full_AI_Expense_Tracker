@@ -1,7 +1,4 @@
 // app/addExpense/addExpenseService.js
-let { json } = require('express');
-const { ChatOpenAI } = require('@langchain/openai');
-const { ChatPromptTemplate, PromptTemplate } = require('@langchain/core/prompts');
 const Expense = require('../../db/models/addExpense');
 const vectorStore = require('../../db/vectorStore');
 
@@ -24,8 +21,6 @@ const addExpenseService = {};
     console.error('Error saving expense:', err);
     throw err;
   }
-  console.log('addExpenseService hit with', incomingQuery);
-
  
 };
 

@@ -7,8 +7,9 @@ const dotenv = require('dotenv');
 
 dotenv.config();
 
-const COLLECTION_NAME = "expense";
+const COLLECTION_NAME = process.env.QDRANT_COLLECTION_NAME;
 const VECTOR_SIZE = 1536;
+
 
 const embeddings = new OpenAIEmbeddings({
   openAIApiKey: process.env.OPENAI_API_KEY
@@ -26,6 +27,24 @@ const vectorStore = new QdrantVectorStore(qdrantClient, embeddings, {
 console.log('vectorStore initialized');
 
 vectorStore.addExpense = async(json) => {
+
+  const collections = await qdrantClient.getCollections();
+  const collectionExists = collections.collections.some(
+      collection => collection.name === COLLECTION_NAME
+  );
+
+  if (!collectionExists) {
+      // Create new collection with proper configuration
+      await qdrantClient.createCollection(COLLECTION_NAME, {
+          vectors: {
+              size: VECTOR_SIZE,
+              distance: "Cosine"
+          }
+      });
+
+      console.log("✅ Created new Qdrant collection");
+  }
+  
   const id = randomUUID();
   console.log('vectorStore hit');
 
