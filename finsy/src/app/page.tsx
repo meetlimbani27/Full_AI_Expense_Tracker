@@ -17,7 +17,10 @@ export default function Home() {
       try {
         console.log("sending",{expense});
         const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense, mode: 'chat' });
-        console.log(res.data);
+        toast({
+          description: res.data,
+          variant: 'default',
+        })
         //   setLoading(true);
         //   console.log(expense);
         //   const res = await axios.post('http://localhost:8000/api/expenses/analyze', { expense });

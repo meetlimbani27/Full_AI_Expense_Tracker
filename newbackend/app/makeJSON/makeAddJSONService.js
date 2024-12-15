@@ -1,4 +1,4 @@
-// app/makeJSON/makeJSONService.js
+// app/makeAddJSON/makeAddJSONService.js
 let { json } = require('express');
 const { ChatOpenAI } = require('@langchain/openai');
 const { ChatPromptTemplate, PromptTemplate } = require('@langchain/core/prompts');
@@ -6,10 +6,10 @@ const Expense = require('../../db/models/addExpense');
 const vectorStore = require('../../db/vectorStore');
 const addExpenseService = require('../addExpense/addExpenseService');
 
-const makeJSONService = {};
+const makeAddJSONService = {};
 
-makeJSONService.makeJSON = async (incomingQuery, mode) => {
-  console.log('makeJSONService hit with query:', incomingQuery);
+makeAddJSONService.makeAddJSON = async (incomingQuery, mode) => {
+  console.log('makeAddJSONService hit with query:', incomingQuery);
 
   const model = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY,
@@ -53,4 +53,4 @@ makeJSONService.makeJSON = async (incomingQuery, mode) => {
 
 };
 
-module.exports = makeJSONService;
+module.exports = makeAddJSONService;

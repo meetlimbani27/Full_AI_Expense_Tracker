@@ -1,7 +1,7 @@
 // app/chatQuery/chatQueryService.js
 const { ChatOpenAI } = require('@langchain/openai');
 const { ChatPromptTemplate, PromptTemplate } = require('@langchain/core/prompts');
-const makeJSONService = require('../makeJSON/makeJSONService');
+const makeAddJSONService = require('../makeJSON/makeAddJSONService');
 // const Expense = require('../../db/models/addExpense');
 
 const expenseService = {};
@@ -28,15 +28,15 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
     switch (intent) {
       case 'adding':
         console.log('making JSON')
-        const makeJSONResult = await makeJSONService.makeJSON(incomingQuery, mode);
+        const makeAddJSONResult = await makeAddJSONService.makeAddJSON(incomingQuery, mode);
         console.log('adding expense')
-        return 'added';
+        return 'new Expense added';
       case 'querying':
         console.log('querying expense')
-        return 'querying';
+        return 'query reurned';
       default:
         console.log('not an expense')
-        return 'not an expense';
+        return 'this was not an expense';
     }
 
 
