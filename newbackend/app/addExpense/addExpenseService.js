@@ -19,13 +19,14 @@ const addExpenseService = {};
     await vectorStore.addExpense(json);
     // console.log('newExpense added', newExpense);
     console.log('new Expense added');
+    return json;
   } catch (err) {
     console.error('Error saving expense:', err);
     throw err;
   }
   console.log('addExpenseService hit with', incomingQuery);
 
-  return json;
+ 
 };
 
 module.exports = addExpenseService;

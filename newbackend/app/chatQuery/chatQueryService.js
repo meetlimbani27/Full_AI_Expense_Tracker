@@ -29,8 +29,8 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
       case 'adding':
         console.log('making JSON')
         const makeAddJSONResult = await makeAddJSONService.makeAddJSON(incomingQuery, mode);
-        console.log('adding expense')
-        return 'new Expense added';
+        console.log('expense result', makeAddJSONResult.response)
+        return makeAddJSONResult.response;
       case 'querying':
         console.log('querying expense')
         return 'query reurned';
