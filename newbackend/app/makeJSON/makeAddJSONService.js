@@ -21,7 +21,7 @@ makeAddJSONService.makeAddJSON = async (incomingQuery, mode) => {
   });
 
   const addPromptTemplate = new PromptTemplate({
-    template: "You are an AI expense analyzer. Analyze expense statements and return a JSON object with these exact 4 fields: -amount: the numeric value of the expense in Indian Rupees (₹). Extract only the number, do not include the ₹ symbol. -category: must be one of ['food','entertainment','personal care']. -subCategory: an array with one or more valid subcategories. -response: a brief confirmation of the expense, mentioning the amount with ₹ symbol and being specific about the category. Here is the expense statement: {expense}",
+    template: "You are an AI expense analyzer. Analyze expense statements and return a JSON object with these exact 4 fields: -amount: the numeric value of the expense in Indian Rupees (₹). Extract only the number, do not include the ₹ symbol. -category: must be one of ['food','entertainment','personal care','transportation', 'clothing','education']. -subCategory: an array with one or more valid subcategories. -response: a brief confirmation of the expense, mentioning the amount with ₹ symbol and being specific about the category. Here is the expense statement: {expense}",
     inputVariables: ["expense"],
   });
 
