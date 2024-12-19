@@ -48,7 +48,14 @@ vectorStore.addExpense = async(json) => {
   const id = randomUUID();
   console.log('vectorStore hit');
 
-  text = `[${json.category.toUpperCase()}] Expense of ₹${json.amount} for Category: ${json.category} under Subcategories: ${json.subCategory.join(', ')} on ${json.createdAt.toLocaleDateString()}`;
+  const text = `[${json.category.toUpperCase()}] Expense of ₹${json.amount} for Category: ${json.category} under Subcategories: ${json.subCategory.join(', ')} on ${json.createdAt.toLocaleDateString()}. Description: ${json.description || 'No description provided.'}`;
+
+  const payload = {
+    amount: json.amount,
+    category: json.category,
+    subCategory: json.subCategory,
+    createdAt: json.createdAt.toISOString(), // ISO format for consistency
+  };
 
   console.log('text created', text);
 
@@ -62,7 +69,7 @@ vectorStore.addExpense = async(json) => {
       {
         id: id,
         vector: embedding,
-        payload: json
+        payload: payload
       }
     ]
   });
