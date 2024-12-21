@@ -18,7 +18,9 @@ export default function Home() {
       try {
         setLoading(true);
         console.log("sending",{expense});
-        const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense, mode: 'chat' });
+        // const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense, mode: 'chat' });
+        const res = await axios.post('http://localhost:8000/api/bulkAdd/bulkAdd', { expense });
+
         const { response, intent } = res.data;
 
         setResponse(response);

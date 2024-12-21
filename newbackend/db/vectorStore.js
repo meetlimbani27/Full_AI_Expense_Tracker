@@ -8,10 +8,11 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const COLLECTION_NAME = process.env.QDRANT_COLLECTION_NAME;
-const VECTOR_SIZE = 1536;
+const VECTOR_SIZE = 3072;
 
 
 const embeddings = new OpenAIEmbeddings({
+  model : "text-embedding-3-large",
   openAIApiKey: process.env.OPENAI_API_KEY
 });
 const qdrantClient = new QdrantClient({
@@ -27,7 +28,7 @@ const vectorStore = new QdrantVectorStore(qdrantClient, embeddings, {
 console.log('vectorStore initialized');
 
 vectorStore.addExpense = async(json) => {
-
+  console.log(COLLECTION_NAME);
   const collections = await qdrantClient.getCollections();
   const collectionExists = collections.collections.some(
       collection => collection.name === COLLECTION_NAME
@@ -48,19 +49,25 @@ vectorStore.addExpense = async(json) => {
   const id = randomUUID();
   console.log('vectorStore hit');
 
-  const text = `[${json.category.toUpperCase()}] Expense of ₹${json.amount} for Category: ${json.category} under Subcategories: ${json.subCategory.join(', ')} on ${json.createdAt.toLocaleDateString()}. Description: ${json.description || 'No description provided.'}`;
+  const embedding_text = `Category: ${json.category.toUpperCase()}. Subcategories: ${json.subCategory.join(', ')}. Amount: ₹${json.amount}. Purpose: ${json.description || 'General Expense'}. Date: ${json.createdAt.toISOString()}.`;
+
+
+  const test_text = `[${json.category.toUpperCase()}]`;
+
+  const embedding = await embeddings.embedQuery(embedding_text);
+  console.log('embeddings created',);
 
   const payload = {
     amount: json.amount,
     category: json.category,
-    subCategory: json.subCategory,
-    createdAt: json.createdAt.toISOString(), // ISO format for consistency
+    embedding: embedding_text,
+    // subCategory: json.subCategory,
+    // createdAt: json.createdAt.toISOString(), // ISO format for consistency
   };
 
-  console.log('text created', text);
+  console.log('text created', test_text);
 
-  const embedding = await embeddings.embedQuery(text);
-  console.log('embeddings created',);
+  
 
   await qdrantClient.upsert(COLLECTION_NAME,{
     

@@ -14,8 +14,10 @@ app.use(express.json());
 
 //Routes
 const chatQueryRoutes = require('./app/chatQuery/chatQueryRoutes');
-app.use('/api/chatQuery', chatQueryRoutes);
+const bulkAddRoutes = require('./app/makeJSON/bulkAddRoutes');
 
+app.use('/api/chatQuery', chatQueryRoutes);
+app.use('/api/bulkAdd', bulkAddRoutes);
 
 
 
