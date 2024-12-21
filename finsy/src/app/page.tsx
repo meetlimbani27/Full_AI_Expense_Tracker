@@ -11,20 +11,23 @@ export default function Home() {
   const { toast } = useToast()
   const [expense, setExpense] = useState('');
   const [loading, setLoading] = useState(false);
-  const [response, setResponse] = useState('');
   const [intent, setIntent] = useState('');
+  const [result, setResult] = useState('');
+  const [backendContent, setBackendContent] = useState('');
+
 
   const handleSubmit = async () => {
       try {
         setLoading(true);
         console.log("sending",{expense});
-        // const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense, mode: 'chat' });
-        const res = await axios.post('http://localhost:8000/api/bulkAdd/bulkAdd', { expense });
+        const res = await axios.post('http://localhost:8000/api/chatQuery/intent', { expense, mode: 'chat' });
+        // const res = await axios.post('http://localhost:8000/api/bulkAdd/bulkAdd', { expense });
 
-        const { response, intent } = res.data;
+        const { response, intent, content } = res.data;
+        console.log(content);
 
-        setResponse(response);
         setIntent(intent);
+        setResult(content);
         setLoading(false);
 
         switch (intent) {
@@ -90,7 +93,7 @@ export default function Home() {
           "Send Expense"
         )}
       </Button>
-      {(intent === "not an expense") && (<div className='text-[#e6e0e0] font-bold'>{response}</div>)}
+      {(<div className='text-[#e6e0e0] font-bold' dangerouslySetInnerHTML={{ __html: result }}></div>)}
     </section>
   );
 }

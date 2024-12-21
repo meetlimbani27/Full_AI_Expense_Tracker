@@ -27,7 +27,7 @@ const vectorStore = new QdrantVectorStore(qdrantClient, embeddings, {
 });
 console.log('vectorStore initialized');
 
-vectorStore.addExpense = async(json) => {
+vectorStore.addExpense = async(json, incomingQuery) => {
   console.log(COLLECTION_NAME);
   const collections = await qdrantClient.getCollections();
   const collectionExists = collections.collections.some(
@@ -55,12 +55,13 @@ vectorStore.addExpense = async(json) => {
   const test_text = `[${json.category.toUpperCase()}]`;
 
   const embedding = await embeddings.embedQuery(embedding_text);
-  console.log('embeddings created',);
+  console.log('embeddings created of', incomingQuery);
 
   const payload = {
     amount: json.amount,
     category: json.category,
     embedding: embedding_text,
+    query: incomingQuery,
     // subCategory: json.subCategory,
     // createdAt: json.createdAt.toISOString(), // ISO format for consistency
   };

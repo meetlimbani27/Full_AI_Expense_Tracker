@@ -1,27 +1,23 @@
 // app/retrieveExpense/retrieveExpenseService.js
 const { OpenAIEmbeddings } = require('@langchain/openai');
-// const { QdrantVectorStore } = require('@langchain/qdrant');
+const { QdrantVectorStore } = require('@langchain/qdrant');
 const { QdrantClient } = require('@qdrant/js-client-rest');
 const { ChatOpenAI } = require("@langchain/openai");
 const { LLMChain } = require("langchain/chains");
-
-
+const { ChatPromptTemplate, PromptTemplate } = require('@langchain/core/prompts');
+const { query } = require('express');
 
 
 const queryExpenseService = {};
 
 
-
-// const vectorStore = new QdrantVectorStore(qdrantClient, embeddings, {
-//   client: qdrantClient,
-//   collectionName: COLLECTION_NAME,
-//   vectorSize: VECTOR_SIZE
-// });
 console.log('vectorStore initialized');
-
-
+QDRANT_COLLECTION_NAME = process.env.QDRANT_COLLECTION_NAME;
+VECTOR_SIZE = 3072;
 
 queryExpenseService.queryExpense = async (incomingQuery) => {
+  console.log('queryExpenseService hit with query:', incomingQuery, " with collection", process.env.QDRANT_COLLECTION_NAME);
+
   const model = new ChatOpenAI({
     openAIApiKey: process.env.OPENAI_API_KEY,
     temperature: 0.3,
@@ -30,91 +26,67 @@ queryExpenseService.queryExpense = async (incomingQuery) => {
     maxConcurrency: 1,
     timeout: 60000,
 });
-
   const embeddings = new OpenAIEmbeddings({
+    model : "text-embedding-3-large",
     openAIApiKey: process.env.OPENAI_API_KEY
   });
   console.log('embeddings initialized');
   const qdrantClient = new QdrantClient({
+    dimension: VECTOR_SIZE,
     url: process.env.QDRANT_URL,
     apiKey: process.env.QDRANT_API_KEY
   });
+  const vectorStore = new QdrantVectorStore(qdrantClient, embeddings, {
+    client: qdrantClient,
+    collectionName: QDRANT_COLLECTION_NAME,
+    vectorSize: VECTOR_SIZE
+  });
   console.log('qdrantClient initialized');
-  const COLLECTION_NAME = process.env.QDRANT_COLLECTION_NAME;
-  const VECTOR_SIZE = 1536;
-  
-  
-
-  console.log('queryExpenseService hit with query:', incomingQuery);
   const embedding = await embeddings.embedQuery(incomingQuery);
   console.log('embeddings created', embedding);
 
-  const searchResult = await qdrantClient.search(COLLECTION_NAME, {
+  const searchResult = await qdrantClient.search(QDRANT_COLLECTION_NAME, {
     vector: embedding,
     limit: 5,
-    with_payload: true
+    with_payload: true,
+    dimension: 3072
 });
-    // console.log('search result', searchResult);
+    console.log('search result', searchResult);
 
-    const results = searchResult.map(result => ({
-      pageContent: result.payload.content,
-      metadata: {
-          id: result.payload.mongoId,
-          amount: result.payload.amount,
-          category: result.payload.category,
-          subCategory: result.payload.subCategory,
-          date: result.payload.date,
-          score: result.score
-      }
-  }));
-  const expensesText = results.map(r => r.pageContent).join('\n');
-
-  function createTracedChain(chain, name) {
-    chain.tags = [`expense_tracker_${name}`];
-    return {
-        call: async (params) => withRetry(() => chain.call(params))
-    };
-}
+    const results = searchResult.map((result, index) => ({
+        [`expense${index}`]: {
+            amount: result.payload.amount,
+            category: result.payload.category,
+            initialUserQuery: result.payload.query,
+            textUsedToCreateEmbedding: result.payload.embedding,
+            // subCategory: result.payload.subCategory,
+            // date: result.payload.date,
+            score: result.score
+        }
+    }));
+  console.log('results', results);
 
 
-  const retrievalChain = createTracedChain(
-    new LLMChain({
-        llm: model,
-        prompt: retrievalPrompt
-    }),
-    "retrieval_analysis"
-  );
-  
-  const analysis = await retrievalChain.call({
-    query: input,
-    expenses: expensesText
-});
+  const PROMPT_TEMPLATE = `You are an assistant which helps user explain about their expenses. You are given a list of expenses fetched from a vectorDB based on user's initial query while adding the expense. You need to analyze the expenses and provide a summary of the expenses in a style that is similar to user's curent query where he/she want's to know how did they spend their money. The reults can be from different categories like food, travel, shopping etc. but make sure you reply in a way that is similar to user's query and don't include the expenses about which the user has not asked. the output should be in friendly tone and in a <p> tag.
+  Here is use's current query: {incomingQuery}
+   Here is the expenses data: {result}
+   `;
+  const addPromptTemplate = new PromptTemplate({
+    template: PROMPT_TEMPLATE,
+    inputVariables: ["result", "incomingQuery"],
+  });
+  prompt = ChatPromptTemplate.fromTemplate(addPromptTemplate.template);
+  console.log("prompt",prompt)
 
-const retrievalPrompt = ChatPromptTemplate.fromMessages([
-  ["system", `You are an AI assistant that helps analyze and summarize expense information.
-Given a user's query and a list of relevant expenses, provide a clear and helpful response.
+  const chain = prompt.pipe(model);
+    console.log('calling model');
+    const retrieval = await chain.invoke({ 
+      result: results,
+      incomingQuery: incomingQuery 
+    });
+    console.log('retrieval', retrieval.content);
 
-Guidelines:
-1. Calculate total amounts when relevant
-2. Group expenses by category if mentioned
-3. Highlight patterns or unusual expenses
-4. Keep the response concise but informative
-5. Use Indian Rupee (₹) for all amounts
-
-Example Query: "show my food expenses"
-Example Expenses: 
-- ₹500 for lunch at restaurant (Food)
-- ₹200 for snacks (Food)
-- ₹1000 for groceries (Food)
-
-Example Response:
-"I found 3 food-related expenses totaling ₹1,700. This includes ₹500 for lunch, ₹200 for snacks, and ₹1,000 for groceries."
-`],
-  ["human", "Query: {query}\nExpenses:\n{expenses}"]
-]);
-
-
-console.log('\n📊 ' + analysis.text);
+    return retrieval.content;
 
 };
 

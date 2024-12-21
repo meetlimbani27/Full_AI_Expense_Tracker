@@ -36,7 +36,8 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
         console.log('expense result', makeAddJSONResult)
         return {
                   response: makeAddJSONResult,
-                  intent: intent
+                  intent: intent,
+                  content: "expense added"
                 };
 
         case 'querying':
@@ -44,7 +45,8 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
         const queryExpenseResult = await queryExpenseService.queryExpense(incomingQuery);
         console.log('expense result', queryExpenseResult)
         return {
-                  response: queryExpenseResult,
+                  response: "query retrieved",
+                  content : queryExpenseResult,
                   intent: intent
                 };
       default:
@@ -52,8 +54,9 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
         const notJSONResult = await notJSONService.notJSON(incomingQuery);
         console.log('intent', intent)
         return {
-          response: notJSONResult,
-          intent: intent
+          response: "general question",
+          intent: intent,
+          content: notJSONResult
         } 
     }
 

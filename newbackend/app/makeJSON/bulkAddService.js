@@ -206,7 +206,7 @@ const CATEGORIES = [
       
       
           // Save the expense and return a response
-          const addExpenseResult = await addExpenseService.addExpense(json);
+          const addExpenseResult = await addExpenseService.addExpense(json, expense_statement);
           return addExpenseResult.response;
       })
   
