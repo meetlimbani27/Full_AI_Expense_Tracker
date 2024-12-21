@@ -3,6 +3,8 @@
 const { ChatOpenAI } = require('@langchain/openai');
 const makeAddJSONService = require('../makeJSON/makeAddJSONService');
 const notJSONService = require('../makeJSON/notJSONService');
+const queryExpenseService = require('../retrieveExpense/retrieveExpenseService');
+
 
 
 const expenseService = {};
@@ -18,6 +20,7 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
     maxConcurrency: 1,
     timeout: 60000, 
   });
+  // function calling model : gpt-4-0613
 
   const systemPrompt = `Categorize the expense's intent as either 'adding'(for adding expense) or 'querying'(for querying about expense) or 'not an expense'(for general questions) only. Here is the expense statement: "${incomingQuery}"`;
 
@@ -33,19 +36,27 @@ expenseService.categorizeQuery = async (incomingQuery, mode) => {
         console.log('expense result', makeAddJSONResult)
         return {
                   response: makeAddJSONResult,
-                  intent: intent
+                  intent: intent,
+                  content: "expense added"
                 };
 
         case 'querying':
         console.log('querying expense')
-        return 'query reurned';
+        const queryExpenseResult = await queryExpenseService.queryExpense(incomingQuery);
+        console.log('expense result', queryExpenseResult)
+        return {
+                  response: "query retrieved",
+                  content : queryExpenseResult,
+                  intent: intent
+                };
       default:
         console.log('not an expense');
         const notJSONResult = await notJSONService.notJSON(incomingQuery);
         console.log('intent', intent)
         return {
-          response: notJSONResult,
-          intent: intent
+          response: "general question",
+          intent: intent,
+          content: notJSONResult
         } 
     }
 

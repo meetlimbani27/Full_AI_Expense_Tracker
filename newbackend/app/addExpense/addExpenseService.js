@@ -4,7 +4,7 @@ const vectorStore = require('../../db/vectorStore');
 
 const addExpenseService = {};
 
-  addExpenseService.addExpense = async (json) => {
+  addExpenseService.addExpense = async (json, incomingQuery) => {
   console.log('addExpenseService hit');
 
   try {
@@ -13,7 +13,7 @@ const addExpenseService = {};
     await newExpense.save();
 
     // add expense to vector store
-    await vectorStore.addExpense(json);
+    await vectorStore.addExpense(json, incomingQuery);
     // console.log('newExpense added', newExpense);
     console.log('new Expense added');
     return json;

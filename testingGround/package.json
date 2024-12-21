@@ -1,0 +1,19 @@
+{
+  "name": "conversational-llm",
+  "version": "1.0.0",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@langchain/openai": "^0.3.16",
+    "dotenv": "^16.4.7",
+    "langchain": "^0.3.7",
+    "openai": "^4.77.0"
+  }
+}
