@@ -3,7 +3,6 @@ const { OpenAIEmbeddings } = require('@langchain/openai');
 const { QdrantVectorStore } = require('@langchain/qdrant');
 const { QdrantClient } = require('@qdrant/js-client-rest');
 const { ChatOpenAI } = require("@langchain/openai");
-const { LLMChain } = require("langchain/chains");
 const { ChatPromptTemplate, PromptTemplate } = require('@langchain/core/prompts');
 const { query } = require('express');
 

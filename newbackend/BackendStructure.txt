@@ -2,6 +2,7 @@ newbackend/
 ├── .env
 ├── .env.example
 ├── app/
+|   ├── constants.js
 │   ├── addExpense/
 │   │   ├── addExpenseController.js
 │   │   ├── addExpenseRoutes.js
@@ -14,6 +15,12 @@ newbackend/
 │   │   ├── retrieveExpenseController.js
 │   │   ├── retrieveExpenseRoutes.js
 │   │   └── retrieveExpenseService.js
+|   ├── makeJSON/
+│   │   ├── bulkAddController.js
+│   │   ├── bulkAddRoutes.js
+|   |   ├── notJSONService.js
+|   |   ├── makeAddJSONService.js
+│   │   └── bulkAddService.js
 │   └── voiceQuery/
 │       ├── voiceQueryController.js
 │       ├── voiceQueryRoutes.js
