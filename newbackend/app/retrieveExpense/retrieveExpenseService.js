@@ -132,6 +132,7 @@ ${CATEGORIES.map((catObj) => {
 
 current Date and Time is : ${new Date()}
 
+
 Analyze the following user's retrieving query and return a JSON object with these exact 5 fields:
 - category: STRICTLY must be one of [${CATEGORIES.map(
   (catObj) => `'${Object.keys(catObj)[0]}'`
@@ -139,6 +140,8 @@ Analyze the following user's retrieving query and return a JSON object with thes
 - startDate: if the query has a date range then this field will have the starting date and time in this format 2024-12-28T09:35:17.933Z.
 - EndDate: if the query has a date range then this field will have the ending date and time in this format 2024-12-28T09:35:17.933Z
 - subCategory: an array with one or more valid subcategories corresponding to the identified category.
+
+if no date or time period is mentioned then default to current month.
 
 
 Here is the user's query: {query}
@@ -174,11 +177,11 @@ queryExpenseService.queryExpense = async (incomingQuery) => {
     url: process.env.QDRANT_URL,
     apiKey: process.env.QDRANT_API_KEY,
   });
-  const vectorStore = new QdrantVectorStore(qdrantClient, embeddings, {
-    client: qdrantClient,
-    collectionName: QDRANT_COLLECTION_NAME,
-    vectorSize: VECTOR_SIZE,
-  });
+  // const vectorStore = new QdrantVectorStore(qdrantClient, embeddings, {
+  //   client: qdrantClient,
+  //   collectionName: QDRANT_COLLECTION_NAME,
+  //   vectorSize: VECTOR_SIZE,
+  // });
   console.log("qdrantClient initialized");
   const embedding = await embeddings.embedQuery(incomingQuery);
   console.log("embeddings created", embedding);
