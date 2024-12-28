@@ -1,19 +1,17 @@
 // app/chatQuery/chatQueryRoutes.js
 
-const express = require('express');
+// const express = require("express");
+// const chatQueryRouter = express.Router();
+// const chatQueryController = require("./chatQueryController");
+
+import express from "express";
+import chatQueryController from "./chatQueryController.js";
 const chatQueryRouter = express.Router();
-const chatQueryController = require('./chatQueryController');
 
+const chatQueryMiddleware = [chatQueryController.incomingChatQuery];
+chatQueryRouter.post("/intent", chatQueryMiddleware);
 
-const chatQueryMiddleware = [
-    chatQueryController.incomingChatQuery,
-]
-chatQueryRouter.post('/intent', chatQueryMiddleware);
-
-
-module.exports = chatQueryRouter;
-
-
+export default chatQueryRouter;
 // const filterBookMiddleware = [
 //   bookValidator.validateFilterBookMiddleware(),
 //   validator.isError,

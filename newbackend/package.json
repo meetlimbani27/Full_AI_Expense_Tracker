@@ -30,5 +30,6 @@
   },
   "keywords": [],
   "author": "Meet Limbani",
-  "license": "ISC"
+  "license": "ISC",
+  "type": "module"
 }

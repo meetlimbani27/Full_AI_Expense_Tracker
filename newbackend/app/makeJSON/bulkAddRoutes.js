@@ -1,14 +1,11 @@
 // app/makeJSON/bulkAddRoutes.js
 
-const bulkAddController = require('./bulkAddController');
+import bulkAddController from "./bulkAddController.js";
+import express from "express";
 
-const express = require('express');
 const bulkAddRouter = express.Router();
 
-const bulkAddMiddleware = [
-    bulkAddController.bulkAdd,
-]
-bulkAddRouter.post('/bulkAdd', bulkAddMiddleware);
+const bulkAddMiddleware = [bulkAddController.bulkAdd];
+bulkAddRouter.post("/bulkAdd", bulkAddMiddleware);
 
-
-module.exports = bulkAddRouter;
+export default bulkAddRouter;
