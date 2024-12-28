@@ -140,14 +140,6 @@ Analyze the following user's retrieving query and return a JSON object with thes
 
 Here is the user's query: {query}
 `;
-let OPENAI_API_KEY =
-  "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";
-
-let QDRANT_COLLECTION_NAME = "tencat";
-let VECTOR_SIZE = 3072;
-let QDRANT_URL =
-  "https://c19f3a5e-e9e7-4140-a336-5b00a8e08657.europe-west3-0.gcp.cloud.qdrant.io:6333";
-let QDRANT_API_KEY = "fU5GcSTjHXa1uKH3nogy9Lvx6zlppL3Y5kZX06ub5y8qWeftKsXIvQ";
 
 const qdrantClient = new QdrantClient({
   dimension: VECTOR_SIZE,
