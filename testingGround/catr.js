@@ -6,6 +6,8 @@
 import { ChatPromptTemplate, PromptTemplate } from "@langchain/core/prompts";
 import { ChatOpenAI } from "@langchain/openai";
 import { QdrantClient } from "@qdrant/js-client-rest";
+import env from "dotenv";
+env.config();
 
 const CATEGORIES = [
   {
@@ -129,6 +131,7 @@ ${CATEGORIES.map((catObj) => {
 
 current Date and Time is : ${new Date()}
 
+
 Analyze the following user's retrieving query and return a JSON object with these exact 5 fields:
 - category: STRICTLY must be one of [${CATEGORIES.map(
   (catObj) => `'${Object.keys(catObj)[0]}'`
@@ -137,18 +140,20 @@ Analyze the following user's retrieving query and return a JSON object with thes
 - EndDate: if the query has a date range then this field will have the ending date and time in this format 2024-12-28T09:35:17.933Z
 - subCategory: an array with one or more valid subcategories corresponding to the identified category.
 
+if no date or time period is mentioned then default to current month.
+
 
 Here is the user's query: {query}
 `;
 
 const qdrantClient = new QdrantClient({
-  dimension: VECTOR_SIZE,
-  url: QDRANT_URL,
-  apiKey: QDRANT_API_KEY,
+  dimension: process.env.VECTOR_SIZE,
+  url: process.env.QDRANT_URL,
+  apiKey: process.env.QDRANT_API_KEY,
 });
 
 const model = new ChatOpenAI({
-  openAIApiKey: OPENAI_API_KEY,
+  openAIApiKey: process.env.OPENAI_API_KEY,
   temperature: 0.3,
   modelName: "gpt-3.5-turbo",
   maxRetries: 5,
@@ -157,25 +162,43 @@ const model = new ChatOpenAI({
 });
 
 const main = async () => {
-  //   const retrievePromptTemplate = new PromptTemplate({
-  //     template: PROMPT_TEMPLATE,
-  //     inputVariables: ["query"],
-  //   });
+  const retrievePromptTemplate = new PromptTemplate({
+    template: PROMPT_TEMPLATE,
+    inputVariables: ["query"],
+  });
 
-  //   let prompt = ChatPromptTemplate.fromTemplate(retrievePromptTemplate.template);
+  let prompt = ChatPromptTemplate.fromTemplate(retrievePromptTemplate.template);
 
-  //   const chain = prompt.pipe(model);
-  //   console.log("calling model");
-  //   const result = await chain.invoke({
-  //     query: "how much did i spend on groceries last month",
-  //   });
-  //   console.log("result", result.content);
-  let results = await qdrantClient.scroll(QDRANT_COLLECTION_NAME, {
+  const chain = prompt.pipe(model);
+  console.log("calling model");
+  const result = await chain.invoke({
+    query: "how much did i spend on groceries last month?",
+  });
+  console.log("result", result.content);
+  const { category, startDate, endDate, subCategory } = JSON.parse(
+    result.content
+  );
+  console.log("this --->", category, startDate, endDate, subCategory);
+
+  let results = await qdrantClient.scroll(process.env.QDRANT_COLLECTION_NAME, {
     filter: {
       must: [
         {
           key: "category",
-          match: { value: "Food" },
+          match: { value: category },
+        },
+        {
+          key: "subCategory",
+          match: {
+            any: subCategory,
+          },
+        },
+        {
+          key: "createdAt",
+          range: {
+            gte: startDate,
+            lte: endDate,
+          },
         },
       ],
     },
